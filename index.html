@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>ScholarHub - AI Scholarship Platform</title>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary-fixed": "#1a1b26",
+            "on-background": "#2e3040",
+            "surface-container-lowest": "#f0f2f8",
+            "on-tertiary-fixed": "#2e1065",
+            "secondary-fixed": "#d8dae6",
+            "on-secondary-fixed-variant": "#404252",
+            "surface-container": "#e2e4ea",
+            "inverse-on-surface": "#e8eaf0",
+            "primary-fixed": "#e0e2ff",
+            "primary-container": "#818cf8",
+            "tertiary-container": "#a78bfa",
+            "tertiary-fixed": "#ede9fe",
+            "on-surface": "#2e3040",
+            "on-secondary-container": "#585a68",
+            "on-primary-container": "#e0e2ff",
+            "surface-container-high": "#dcdee4",
+            "error": "#dc2626",
+            "surface": "#e8eaf0",
+            "on-secondary": "#ffffff",
+            "primary": "#6366f1",
+            "surface-container-highest": "#d6d8de",
+            "error-container": "#fee2e2",
+            "tertiary": "#7c3aed",
+            "inverse-primary": "#a5b4fc",
+            "surface-tint": "#6366f1",
+            "tertiary-fixed-dim": "#c4b5fd",
+            "surface-bright": "#edeef4",
+            "secondary": "#6c6e7e",
+            "background": "#e8eaf0",
+            "outline": "#8a8c9a",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#1e1b4b",
+            "surface-container-low": "#e5e7ed",
+            "outline-variant": "#d0d2dc",
+            "surface-variant": "#dcdee4",
+            "secondary-container": "#d8dae6",
+            "primary-fixed-dim": "#a5b4fc",
+            "on-error-container": "#991b1b",
+            "on-tertiary-container": "#3b1f63",
+            "inverse-surface": "#2e3040",
+            "secondary-fixed-dim": "#b8baca",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed-variant": "#4338ca",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#5b21b6",
+            "surface-dim": "#d4d6dc",
+            "on-surface-variant": "#585a68"
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+            lg: "1rem",
+            xl: "1.5rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Plus Jakarta Sans", "sans-serif"],
+            display: ["Plus Jakarta Sans", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"],
+            label: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #e8eaf0;
+        color: #2e3040;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        overscroll-behavior: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+  <!-- React 18, Router & Babel CDN Libraries -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+  <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+  <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased flex flex-col min-h-screen">
+  <div id="root" class="min-h-screen flex flex-col"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { createRoot } = ReactDOM;
+    const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+    // --- App Context for Shared Mock State ---
+    const initialScholarships = [
+      {
+        id: "tata-trusts",
+        name: "Tata Trusts Scholarship",
+        fullName: "Tata Trusts Scholarship 2026-27",
+        provider: "Sir Ratan Tata Trust Foundation",
+        category: "Private Trust",
+        match: 96,
+        amount: "₹75,000",
+        amountSub: "Up to ₹75,000",
+        deadlineDays: 18,
+        deadlineDate: "Nov 30, 2026",
+        eligibility: "B.Tech / BE Students • Family Income < ₹4.5L",
+        progress: 45,
+        progressStatus: "Reviewing essay",
+        filterTag: "urgent",
+        urgent: false,
+        reminders: true,
+        bookmarked: true,
+        seats: "3,200 Seats",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB5bZJCgGmsraA_SkytZFCTfR8k3Gg--rX5llvuWczTt94dmljO4xBJzAOV6QZMW7tQMEZ57-NJHWsshbogzIaCrjf_tNWnCsokHEhPMfuvdk4_xzLyNC-MsaTafsdj6y8eFoZqX-Rei9uAvj3RhpDhuTZDKbNSK_ozG2WZBs4im6sezY3p9fVbiG5EMrB_2FhjMaSiYPMv8SU3CWGzX9y10JkXpm7lRD3skSrglotX"
+      },
+      {
+        id: "telangana-epass",
+        name: "Telangana State Scholarship",
+        fullName: "Telangana Post-Matric ePASS Scholarship",
+        provider: "Dept of Backward Classes & Higher Education",
+        category: "State Level",
+        match: 94,
+        amount: "₹30,000",
+        amountSub: "Full Fee + ₹30,000 Stipend",
+        deadlineDays: 2,
+        deadlineDate: "Nov 12, 2026",
+        eligibility: "Telangana Domicile • Engineering / Degree Programs",
+        progress: 75,
+        progressStatus: "Documents verified",
+        filterTag: "urgent applied",
+        urgent: true,
+        reminders: true,
+        bookmarked: true,
+        seats: "Open Quota",
+        image: null
+      },
+      {
+        id: "national-merit",
+        name: "National Merit Scholarship",
+        fullName: "National Merit Scholarship Scheme (NSP)",
+        provider: "Ministry of Education • Central Sector",
+        category: "Central Govt",
+        match: 98,
+        amount: "₹50,000",
+        amountSub: "Up to ₹50,000",
+        deadlineDays: 12,
+        deadlineDate: "Nov 22, 2026",
+        eligibility: "Min 80% in Class 12 • College degree enrolled",
+        progress: 90,
+        progressStatus: "Ready to submit",
+        filterTag: "urgent",
+        urgent: false,
+        reminders: true,
+        bookmarked: true,
+        seats: "10,000 Pan-India",
+        image: null
+      },
+      {
+        id: "pragati-girls",
+        name: "Pragati Scholarship for Girls",
+        fullName: "Pragati Scholarship for Girls (AICTE)",
+        provider: "Ministry of Education, Govt of India",
+        category: "National AICTE",
+        match: 98,
+        amount: "₹50,000 / yr",
+        amountSub: "₹50,000 / year",
+        deadlineDays: 35,
+        deadlineDate: "Dec 15, 2026",
+        eligibility: "Female students entering 1st/2nd yr Technical Degree",
+        progress: 20,
+        progressStatus: "Started",
+        filterTag: "active",
+        urgent: false,
+        reminders: false,
+        bookmarked: false,
+        seats: "5,000 Slots",
+        image: null
+      },
+      {
+        id: "wadhwani-grant",
+        name: "Wadhwani Foundation Opportunity Grant",
+        fullName: "Wadhwani Foundation Opportunity Grant",
+        provider: "Global Social Development Cell",
+        category: "Foundation Partner",
+        match: 95,
+        amount: "Up to ₹1,00,000",
+        amountSub: "Up to ₹1,00,000",
+        deadlineDays: 60,
+        deadlineDate: "Rolling for AY 2026-27",
+        eligibility: "Undergrad tech innovators with demonstrated project work",
+        progress: 10,
+        progressStatus: "Not started",
+        filterTag: "active",
+        urgent: false,
+        reminders: false,
+        bookmarked: false,
+        seats: "800 Innovators",
+        image: null
+      },
+      {
+        id: "reliance-foundation",
+        name: "Reliance Foundation UG Scholarship",
+        fullName: "Reliance Foundation Undergraduate Scholarship",
+        provider: "Reliance Foundation Leadership Initiative",
+        category: "Corporate CSR",
+        match: 91,
+        amount: "Up to ₹2,00,000",
+        amountSub: "Up to ₹2,00,000",
+        deadlineDays: 65,
+        deadlineDate: "Jan 10, 2027",
+        eligibility: "First-year & Second-year full-time undergraduate students",
+        progress: 0,
+        progressStatus: "Not started",
+        filterTag: "active",
+        urgent: false,
+        reminders: false,
+        bookmarked: false,
+        seats: "5,000 Scholars",
+        image: null
+      },
+      {
+        id: "google-generation",
+        name: "Google Generation Scholarship (APAC)",
+        fullName: "Google Generation Scholarship (APAC)",
+        provider: "Google Students & Diversity Program",
+        category: "Global Tech",
+        match: 93,
+        amount: "$2,500 (~₹2,10,000)",
+        amountSub: "$2,500 (~₹2,10,000)",
+        deadlineDays: 23,
+        deadlineDate: "Dec 05, 2026",
+        eligibility: "Women studying Computer Science or related STEM fields",
+        progress: 0,
+        progressStatus: "Not started",
+        filterTag: "active",
+        urgent: false,
+        reminders: false,
+        bookmarked: false,
+        seats: "Selective",
+        image: null
+      }
+    ];
+
+    // --- Common Layout / Components ---
+    function Header({ title = "ScholarHub", subtitle = "Home", backButton = false }) {
+      const navigate = useNavigate();
+      return (
+        <header className="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_4px_16px_rgba(0,0,0,0.03)]">
+          <div className="h-16 px-4 md:px-5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {backButton ? (
+                <button
+                  aria-label="Back"
+                  className="w-11 h-11 rounded-xl bg-surface flex items-center justify-center text-on-surface shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all cursor-pointer"
+                  onClick={() => navigate(-1)}
+                >
+                  <span className="material-symbols-outlined text-[20px]">arrow_back_ios_new</span>
+                </button>
+              ) : (
+                <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] text-primary">
+                  <span className="material-symbols-outlined text-[22px]">school</span>
+                </div>
+              )}
+              <div className="flex flex-col min-w-0">
+                <span className="text-base font-headline font-semibold text-on-surface leading-tight tracking-tight truncate max-w-[200px]">
+                  {title}
+                </span>
+                {subtitle && (
+                  <span className="text-[11px] font-medium text-on-surface-variant leading-none">
+                    {subtitle}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                aria-label="Notifications"
+                onClick={() => alert("You have 1 urgent deadline: Telangana State Scholarship closes in 48h.")}
+                className="relative w-11 h-11 rounded-xl bg-surface flex items-center justify-center text-on-surface shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all"
+                type="button"
+              >
+                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span>
+              </button>
+
+              <Link
+                to="/profile"
+                className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[2px_2px_5px_rgba(99,102,241,0.3)]"
+              >
+                <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
+              </Link>
+            </div>
+          </div>
+        </header>
+      );
+    }
+
+    function BottomNav() {
+      const location = useLocation();
+      const current = location.pathname;
+
+      const navItems = [
+        { path: "/home", label: "Home", icon: "home" },
+        { path: "/explore", label: "Explore", icon: "explore" },
+        { path: "/saved-deadlines", label: "Saved", icon: "bookmark" },
+        { path: "/profile", label: "Profile", icon: "account_circle" },
+      ];
+
+      return (
+        <nav className="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-6px_20px_rgba(0,0,0,0.04)]">
+          <div className="flex items-center justify-around h-20 px-3 max-w-md mx-auto">
+            {navItems.map((item) => {
+              const isActive = current === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex flex-col items-center justify-center gap-1 w-16 h-14 rounded-xl transition-all ${
+                    isActive
+                      ? "text-primary shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] font-semibold"
+                      : "text-on-surface-variant hover:text-on-surface"
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
+                  <span className="text-[11px] font-label font-medium tracking-tight">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      );
+    }
+
+    // --- Screen 1: Login / Auth Screen ---
+    function LoginScreen() {
+      const navigate = useNavigate();
+      const [email, setEmail] = useState("student@university.edu");
+      const [password, setPassword] = useState("password123");
+      const [showPassword, setShowPassword] = useState(false);
+      const [rememberMe, setRememberMe] = useState(true);
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        navigate("/home");
+      };
+
+      return (
+        <main className="flex-1 w-full pt-safe pb-safe bg-surface min-h-screen flex items-center justify-center">
+          <div className="flex flex-col w-full max-w-md mx-auto px-5 py-6 space-y-6">
+            {/* Brand Header */}
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center text-primary relative transition-transform active:scale-95"
+                style={{
+                  boxShadow: "6px 6px 14px rgba(0,0,0,0.08), -6px -6px 14px rgba(255,255,255,0.7)"
+                }}
+              >
+                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  school
+                </span>
+                <span
+                  className="material-symbols-outlined text-xs absolute -bottom-1 -right-1 text-tertiary bg-surface rounded-full p-1"
+                  style={{
+                    boxShadow: "2px 2px 5px rgba(0,0,0,0.07), -2px -2px 5px rgba(255,255,255,0.8)"
+                  }}
+                >
+                  auto_awesome
+                </span>
+              </div>
+              <div className="space-y-1">
+                <h1 className="text-2xl font-semibold text-on-surface tracking-tight font-headline">Welcome Back</h1>
+                <p className="text-xs text-on-surface-variant max-w-xs leading-relaxed">
+                  Sign in to track your scholarships, deadlines &amp; AI matches
+                </p>
+              </div>
+            </div>
+
+            {/* Form Container */}
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              {/* Email Field */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-on-surface-variant ml-1 font-label">
+                  Institutional or Personal Email
+                </label>
+                <div
+                  className="flex items-center px-4 py-3 rounded-xl transition-all"
+                  style={{
+                    boxShadow: "inset 4px 4px 8px rgba(0,0,0,0.06), inset -4px -4px 8px rgba(255,255,255,0.5)"
+                  }}
+                >
+                  <span className="material-symbols-outlined text-secondary text-xl mr-3 select-none">mail</span>
+                  <input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                    className="w-full bg-transparent text-sm text-on-surface placeholder:text-outline focus:outline-none font-body"
+                    placeholder="student@university.edu"
+                    required
+                    type="email"
+                  />
+                </div>
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-on-surface-variant ml-1 font-label">
+                  Password
+                </label>
+                <div
+                  className="flex items-center px-4 py-3 rounded-xl transition-all"
+                  style={{
+                    boxShadow: "inset 4px 4px 8px rgba(0,0,0,0.06), inset -4px -4px 8px rgba(255,255,255,0.5)"
+                  }}
+                >
+                  <span className="material-symbols-outlined text-secondary text-xl mr-3 select-none">lock</span>
+                  <input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    className="w-full bg-transparent text-sm text-on-surface placeholder:text-outline focus:outline-none font-body tracking-wider"
+                    placeholder="••••••••••••"
+                    required
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <button
+                    aria-label="Toggle password visibility"
+                    className="text-secondary hover:text-primary transition-colors flex items-center justify-center p-1 rounded-lg"
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <span className="material-symbols-outlined text-xl select-none">
+                      {showPassword ? "visibility_off" : "visibility"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Options */}
+              <div className="flex items-center justify-between pt-1 px-1">
+                <label className="flex items-center space-x-2.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={() => setRememberMe(!rememberMe)}
+                    className="hidden peer"
+                  />
+                  <div
+                    className="w-5 h-5 rounded-lg flex items-center justify-center text-primary transition-all peer-checked:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]"
+                    style={{
+                      boxShadow: "3px 3px 6px rgba(0,0,0,0.07), -3px -3px 6px rgba(255,255,255,0.7)"
+                    }}
+                  >
+                    <span className={`material-symbols-outlined text-sm font-semibold transition-opacity ${rememberMe ? "opacity-100" : "opacity-0"}`}>
+                      check
+                    </span>
+                  </div>
+                  <span className="text-xs text-on-surface-variant font-medium">Remember me</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => alert("Password reset link sent to registered institutional email.")}
+                  className="text-xs font-semibold text-primary hover:text-tertiary transition-colors"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
+              {/* Primary CTA */}
+              <button
+                className="w-full py-3.5 px-6 rounded-xl text-primary font-semibold text-sm flex items-center justify-center space-x-2 transition-all active:scale-[0.98]"
+                style={{
+                  boxShadow: "6px 6px 14px rgba(0,0,0,0.09), -6px -6px 14px rgba(255,255,255,0.75)"
+                }}
+                type="submit"
+              >
+                <span>Sign In to ScholarHub</span>
+                <span className="material-symbols-outlined text-base">arrow_forward</span>
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center my-2">
+              <div
+                className="w-full h-px"
+                style={{
+                  boxShadow: "inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px rgba(255,255,255,0.8)"
+                }}
+              ></div>
+              <span className="absolute px-3 bg-surface text-xs font-medium text-on-surface-variant uppercase tracking-wider">
+                or continue with
+              </span>
+            </div>
+
+            {/* Social Auth Options */}
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                onClick={() => navigate("/home")}
+                aria-label="Sign in with Google for Education"
+                className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-on-surface space-y-1 transition-all active:scale-95"
+                style={{
+                  boxShadow: "5px 5px 10px rgba(0,0,0,0.07), -5px -5px 10px rgba(255,255,255,0.7)"
+                }}
+                type="button"
+              >
+                <svg className="w-5 h-5 text-on-surface" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12.24 10.285V13.4h6.887C18.2 16.14 15.645 18 12.24 18c-3.315 0-6-2.685-6-6s2.685-6 6-6c1.62 0 3.085.645 4.18 1.69l2.36-2.36C17.065 3.655 14.79 3 12.24 3 7.27 3 3.24 7.03 3.24 12s4.03 9 9 9c5.2 0 8.65-3.655 8.65-8.815 0-.6-.055-1.185-.155-1.9H12.24z"></path>
+                </svg>
+                <span className="text-[10px] font-medium text-on-surface-variant">Google Edu</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/home")}
+                aria-label="Sign in with Apple"
+                className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-on-surface space-y-1 transition-all active:scale-95"
+                style={{
+                  boxShadow: "5px 5px 10px rgba(0,0,0,0.07), -5px -5px 10px rgba(255,255,255,0.7)"
+                }}
+                type="button"
+              >
+                <svg className="w-5 h-5 text-on-surface" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.89c.66-.82 1.11-1.96.99-3.1-.96.04-2.13.65-2.82 1.45-.6.69-1.14 1.83-1 2.95 1.08.08 2.17-.56 2.83-1.3"></path>
+                </svg>
+                <span className="text-[10px] font-medium text-on-surface-variant">Apple ID</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/home")}
+                aria-label="Sign in via Campus SSO"
+                className="flex flex-col items-center justify-center py-3 px-2 rounded-xl text-primary space-y-1 transition-all active:scale-95"
+                style={{
+                  boxShadow: "5px 5px 10px rgba(0,0,0,0.07), -5px -5px 10px rgba(255,255,255,0.7)"
+                }}
+                type="button"
+              >
+                <span className="material-symbols-outlined text-xl">vpn_key</span>
+                <span className="text-[10px] font-medium text-on-surface-variant">Campus SSO</span>
+              </button>
+            </div>
+
+            {/* Social Proof */}
+            <div
+              className="p-3.5 rounded-xl flex items-center space-x-3"
+              style={{
+                boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.05), inset -3px -3px 6px rgba(255,255,255,0.6)"
+              }}
+            >
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-primary flex-shrink-0"
+                style={{
+                  boxShadow: "3px 3px 6px rgba(0,0,0,0.08), -3px -3px 6px rgba(255,255,255,0.7)"
+                }}
+              >
+                <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  trending_up
+                </span>
+              </div>
+              <div className="text-[11px] leading-tight text-on-surface-variant">
+                <span className="font-semibold text-on-surface">98% of students</span> secure funding faster with custom AI matching algorithms.
+              </div>
+            </div>
+
+            {/* Sign Up Prompt */}
+            <div className="text-center pt-2">
+              <p className="text-xs text-on-surface-variant">
+                Don't have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => navigate("/profile")}
+                  className="font-semibold text-primary hover:text-tertiary ml-1 transition-colors underline-offset-2 hover:underline"
+                >
+                  Create Student Profile
+                </button>
+              </p>
+            </div>
+
+            {/* Footer Navigation */}
+            <div className="flex items-center justify-center space-x-4 pt-4 text-[11px] text-secondary">
+              <button onClick={() => alert("ScholarHub Help Desk: support@scholarhub.edu.in")} className="hover:text-on-surface transition-colors" type="button">Help &amp; Support</button>
+              <span className="text-outline-variant font-light">•</span>
+              <button onClick={() => alert("Privacy policy conforms to Indian DPDP Act 2023.")} className="hover:text-on-surface transition-colors" type="button">Privacy Policy</button>
+              <span className="text-outline-variant font-light">•</span>
+              <button onClick={() => alert("FERPA and DigiLocker encryption enabled.")} className="hover:text-on-surface transition-colors" type="button">FERPA Safety</button>
+            </div>
+          </div>
+        </main>
+      );
+    }
+
+    // --- Screen 2: Home Screen ---
+    function HomeScreen() {
+      const navigate = useNavigate();
+      const [searchTerm, setSearchTerm] = useState("");
+
+      const popularScholarships = [
+        {
+          id: "national-merit",
+          title: "National Merit Scholarship",
+          tag: "National",
+          match: "98% Match",
+          grant: "Up to ₹50,000",
+          deadlineText: "Closes in 12 days",
+          deadlineIcon: "schedule",
+          isUrgent: false
+        },
+        {
+          id: "telangana-epass",
+          title: "Telangana State Scholarship",
+          tag: "State Level",
+          match: "94% Match",
+          grant: "Up to ₹30,000",
+          deadlineText: "Closes in 5 days",
+          deadlineIcon: "alarm",
+          isUrgent: true
+        },
+        {
+          id: "tata-trusts",
+          title: "Tata Trusts Scholarship",
+          tag: "Private Trust",
+          match: "96% Match",
+          grant: "Up to ₹75,000",
+          deadlineText: "Closes in 20 days",
+          deadlineIcon: "schedule",
+          isUrgent: false
+        },
+        {
+          id: "wadhwani-grant",
+          title: "Wadhwani Foundation Opportunity Grant",
+          tag: "Wadhwani Partner",
+          match: "High Fit",
+          grant: "Up to ₹1,00,000",
+          deadlineText: "Open for 2026-27",
+          deadlineIcon: "event_available",
+          isUrgent: false
+        }
+      ];
+
+      const filtered = popularScholarships.filter(s =>
+        s.title.toLowerCase().includes(searchTerm.toLowerCase().trim()) ||
+        s.tag.toLowerCase().includes(searchTerm.toLowerCase().trim())
+      );
+
+      return (
+        <div className="min-h-screen bg-surface flex flex-col">
+          <Header title="ScholarHub" subtitle="Home" />
+          <main className="flex flex-col relative w-full pt-16 pb-28 bg-surface min-h-screen">
+            <div className="flex flex-col w-full max-w-md mx-auto px-5 py-4 gap-6">
+              {/* Greeting Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-headline font-semibold text-on-surface tracking-tight">Hi, Ananya!</h1>
+                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.7)] text-[11px] font-medium">
+                      <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
+                      <span>AI Active</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-on-surface-variant font-medium">Your future is just a step away.</p>
+                </div>
+                <div
+                  onClick={() => navigate("/profile")}
+                  className="w-11 h-11 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[4px_4px_10px_rgba(0,0,0,0.06),-4px_-4px_10px_rgba(255,255,255,0.8)] cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[24px]">verified_user</span>
+                </div>
+              </div>
+
+              {/* Neomorphic Inset Search Bar */}
+              <div className="relative w-full">
+                <div className="w-full flex items-center px-4 py-3 rounded-2xl bg-surface shadow-[inset_3px_3px_7px_rgba(0,0,0,0.07),inset_-3px_-3px_7px_rgba(255,255,255,0.7)]">
+                  <span className="material-symbols-outlined text-outline text-[20px] mr-3">search</span>
+                  <input
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full bg-transparent text-sm text-on-surface placeholder-on-surface-variant/70 focus:outline-none font-medium"
+                    placeholder="Search scholarships, grants, colleges..."
+                    type="text"
+                  />
+                  <button
+                    aria-label="Filter"
+                    onClick={() => navigate("/explore")}
+                    className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.8)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.07),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] ml-1 transition-all"
+                    type="button"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">tune</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Category Grid */}
+              <div className="grid grid-cols-4 gap-3">
+                <Link to="/explore" className="flex flex-col items-center gap-2 group">
+                  <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-primary shadow-[5px_5px_11px_rgba(0,0,0,0.07),-5px_-5px_11px_rgba(255,255,255,0.85)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] transition-all">
+                    <span className="material-symbols-outlined text-[24px]">school</span>
+                  </div>
+                  <span className="text-[11px] font-label font-semibold text-on-surface text-center tracking-tight leading-tight">Scholarships</span>
+                </Link>
+
+                <div
+                  onClick={() => alert("Accessing Resource Library: Previous year essays, format templates, and recommendation letter drafts.")}
+                  className="flex flex-col items-center gap-2 group cursor-pointer"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-primary shadow-[5px_5px_11px_rgba(0,0,0,0.07),-5px_-5px_11px_rgba(255,255,255,0.85)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] transition-all">
+                    <span className="material-symbols-outlined text-[24px]">menu_book</span>
+                  </div>
+                  <span className="text-[11px] font-label font-semibold text-on-surface text-center tracking-tight leading-tight">Resources</span>
+                </div>
+
+                <Link to="/saved-deadlines" className="flex flex-col items-center gap-2 group relative">
+                  <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-primary shadow-[5px_5px_11px_rgba(0,0,0,0.07),-5px_-5px_11px_rgba(255,255,255,0.85)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] transition-all relative">
+                    <span className="material-symbols-outlined text-[24px]">calendar_month</span>
+                    <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span>
+                  </div>
+                  <span className="text-[11px] font-label font-semibold text-on-surface text-center tracking-tight leading-tight">Calendar</span>
+                </Link>
+
+                <div
+                  onClick={() => alert("Connecting to ScholarHub Guidance AI: 24/7 scholarship application review available.")}
+                  className="flex flex-col items-center gap-2 group cursor-pointer"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-primary shadow-[5px_5px_11px_rgba(0,0,0,0.07),-5px_-5px_11px_rgba(255,255,255,0.85)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] transition-all">
+                    <span className="material-symbols-outlined text-[24px]">support_agent</span>
+                  </div>
+                  <span className="text-[11px] font-label font-semibold text-on-surface text-center tracking-tight leading-tight">Guidance</span>
+                </div>
+              </div>
+
+              {/* AI Match Spotlight Banner */}
+              <div
+                onClick={() => navigate("/scholarship/tata-trusts")}
+                className="w-full rounded-2xl bg-surface p-5 shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.8)] relative overflow-hidden flex flex-col gap-3 cursor-pointer"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]">
+                    <span className="material-symbols-outlined text-[14px]">psychology</span>
+                    <span className="text-[11px] font-semibold">Personalized AI Match</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-tertiary">
+                    <span className="w-2 h-2 rounded-full bg-tertiary"></span>
+                    <span>98% Accuracy</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-base font-headline font-semibold text-on-surface leading-snug">
+                    Smart Algorithm Recommendations
+                  </h2>
+                  <p className="text-xs text-on-surface-variant font-medium leading-relaxed">
+                    Curated specifically for <span className="text-on-surface font-semibold">B.Tech (2nd Year)</span>, engineering merit, and verified income tier.
+                  </p>
+                </div>
+                {/* Match Visual Metrics Bar */}
+                <div className="flex items-center gap-3 pt-1">
+                  <div className="flex-1 h-2 rounded-full bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] overflow-hidden p-0.5">
+                    <div className="h-full rounded-full bg-primary w-[98%] transition-all duration-700"></div>
+                  </div>
+                  <span className="text-[11px] font-semibold text-primary shrink-0">14 Verified Fits</span>
+                </div>
+              </div>
+
+              {/* Popular Scholarships Header */}
+              <div className="flex items-center justify-between pt-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base font-headline font-semibold text-on-surface">Popular Scholarships</h2>
+                  <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-surface text-on-surface-variant shadow-[inset_1px_1px_3px_rgba(0,0,0,0.06),inset_-1px_-1px_3px_rgba(255,255,255,0.6)]">
+                    {filtered.length} Active
+                  </span>
+                </div>
+                <Link to="/explore" className="text-xs font-semibold text-primary flex items-center gap-0.5 active:opacity-75">
+                  <span>View All</span>
+                  <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                </Link>
+              </div>
+
+              {/* Scholarships List */}
+              <div className="flex flex-col gap-3.5 pb-2">
+                {filtered.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => navigate(`/scholarship/${item.id}`)}
+                    className="w-full rounded-2xl bg-surface p-4 shadow-[5px_5px_12px_rgba(0,0,0,0.06),-5px_-5px_12px_rgba(255,255,255,0.85)] flex flex-col gap-3 active:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.05),inset_-2px_-2px_6px_rgba(255,255,255,0.6)] transition-all cursor-pointer"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-surface text-primary shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.7)]">
+                            {item.tag}
+                          </span>
+                          <span className="text-[10px] font-semibold text-tertiary flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]">bolt</span>
+                            {item.match}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-headline font-semibold text-on-surface truncate">
+                          {item.title}
+                        </h3>
+                      </div>
+                      <div className="w-8 h-8 rounded-xl bg-surface flex items-center justify-center text-on-surface-variant shadow-[3px_3px_6px_rgba(0,0,0,0.06),-3px_-3px_6px_rgba(255,255,255,0.7)] shrink-0">
+                        <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between pt-1 border-none text-xs">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] text-on-surface-variant font-medium">Award Grant</span>
+                        <span className="text-sm font-semibold text-on-surface tracking-tight">{item.grant}</span>
+                      </div>
+                      <div
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] text-[11px] ${
+                          item.isUrgent ? "text-error font-semibold" : "text-on-surface-variant font-medium"
+                        }`}
+                      >
+                        <span className={`material-symbols-outlined text-[14px] ${item.isUrgent ? "text-error" : "text-primary"}`}>
+                          {item.deadlineIcon}
+                        </span>
+                        <span>{item.deadlineText}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {filtered.length === 0 && (
+                  <div className="p-8 rounded-2xl bg-surface text-center shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06)] text-xs text-on-surface-variant">
+                    No scholarships matching "{searchTerm}". Try another keyword.
+                  </div>
+                )}
+              </div>
+
+              {/* Interactive Tip / Motivation Pill */}
+              <div
+                onClick={() => navigate("/profile")}
+                className="w-full rounded-2xl bg-surface p-4 shadow-[inset_3px_3px_7px_rgba(0,0,0,0.06),inset_-3px_-3px_7px_rgba(255,255,255,0.7)] flex items-center gap-3 cursor-pointer"
+              >
+                <div className="w-9 h-9 rounded-xl bg-surface flex items-center justify-center text-tertiary shadow-[3px_3px_6px_rgba(0,0,0,0.06),-3px_-3px_6px_rgba(255,255,255,0.8)] shrink-0">
+                  <span className="material-symbols-outlined text-[18px]">tips_and_updates</span>
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-semibold text-on-surface">Complete your Academic Profile</span>
+                  <span className="text-[11px] text-on-surface-variant truncate">Add your 1st-year semester grades to unlock 6 more grants.</span>
+                </div>
+              </div>
+            </div>
+          </main>
+          <BottomNav />
+        </div>
+      );
+    }
+
+    // --- Screen 3: Details Screen ---
+    function DetailsScreen({ scholarships, onToggleBookmark }) {
+      const navigate = useNavigate();
+      const [bookmarked, setBookmarked] = useState(true);
+      const [reminderSet, setReminderSet] = useState(false);
+      const [sopUploaded, setSopUploaded] = useState(false);
+
+      const toggleBookmark = () => {
+        setBookmarked(!bookmarked);
+      };
+
+      const toggleReminder = () => {
+        setReminderSet(!reminderSet);
+      };
+
+      const handleAdvisor = () => {
+        alert("AI SOP Checker initialized: Analysing your drafted Statement of Purpose for alignment with Tata Trusts STEM priorities. Score: 88/100 Strong Fit.");
+      };
+
+      const handleApply = () => {
+        alert("Redirecting to Tata Trusts Higher Education Portal with your pre-verified ScholarHub credentials.");
+      };
+
+      return (
+        <div className="min-h-screen bg-surface flex flex-col">
+          <Header title="Scholarship Details" subtitle="" backButton={true} />
+          <main className="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen">
+            <div className="flex flex-col w-full max-w-md mx-auto px-4 space-y-5 pb-24">
+              {/* Top Details Hero Card */}
+              <div className="w-full rounded-xl p-5 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.6)] flex flex-col space-y-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.5)]">
+                      <img
+                        className="w-full h-full object-cover"
+                        alt="Tata Trusts Emblem"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5bZJCgGmsraA_SkytZFCTfR8k3Gg--rX5llvuWczTt94dmljO4xBJzAOV6QZMW7tQMEZ57-NJHWsshbogzIaCrjf_tNWnCsokHEhPMfuvdk4_xzLyNC-MsaTafsdj6y8eFoZqX-Rei9uAvj3RhpDhuTZDKbNSK_ozG2WZBs4im6sezY3p9fVbiG5EMrB_2FhjMaSiYPMv8SU3CWGzX9y10JkXpm7lRD3skSrglotX"
+                      />
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]">
+                          <span className="material-symbols-outlined text-[14px]">verified</span>
+                          Verified Provider
+                        </span>
+                        <span className="text-xs text-on-surface-variant font-medium">Merit &amp; Need</span>
+                      </div>
+                      <h2 className="text-lg font-headline font-semibold text-on-surface tracking-tight truncate mt-1">
+                        Tata Trusts Scholarship
+                      </h2>
+                      <p className="text-xs text-on-surface-variant font-medium">Higher Education Support 2026-27</p>
+                    </div>
+                  </div>
+                  <button
+                    aria-label="Bookmark scholarship"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-surface shadow-[4px_4px_8px_rgba(0,0,0,0.08),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.08),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all text-on-surface"
+                    onClick={toggleBookmark}
+                  >
+                    <span
+                      className={`material-symbols-outlined text-[20px] ${bookmarked ? "text-primary" : ""}`}
+                      style={{ fontVariationSettings: bookmarked ? "'FILL' 1" : "'FILL' 0" }}
+                    >
+                      {bookmarked ? "bookmark" : "bookmark_border"}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Grant & Stats Strip */}
+                <div className="grid grid-cols-2 gap-3 pt-1">
+                  <div className="p-3 rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] flex flex-col">
+                    <span className="text-[11px] font-medium text-on-surface-variant uppercase tracking-wider">Annual Grant</span>
+                    <span className="text-base font-headline font-semibold text-primary mt-0.5">Up to ₹75,000</span>
+                    <span className="text-[10px] text-on-surface-variant">Disbursed per academic yr</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] flex flex-col">
+                    <span className="text-[11px] font-medium text-on-surface-variant uppercase tracking-wider">Application Pool</span>
+                    <span className="text-base font-headline font-semibold text-tertiary mt-0.5">3,200 Seats</span>
+                    <span className="text-[10px] text-on-surface-variant">Pan-India allocation</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Real-Time Deadline Alert Banner */}
+              <div className="w-full rounded-xl p-3.5 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.6)] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] text-error">
+                    <span className="material-symbols-outlined text-[20px]">hourglass_top</span>
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-on-surface">Application closes in 18 days</span>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-on-surface-variant font-medium truncate">Deadline: November 30, 2026 • 11:59 PM IST</p>
+                  </div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <span className="text-xs font-semibold text-primary">Active</span>
+                </div>
+              </div>
+
+              {/* AI Eligibility Checker Section */}
+              <div className="w-full rounded-xl p-5 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.6)] flex flex-col space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-[20px]">neurology</span>
+                    <h3 className="text-sm font-headline font-semibold text-on-surface">AI Eligibility Match</h3>
+                  </div>
+                  <span className="text-[11px] font-semibold text-primary px-2.5 py-1 rounded-full shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]">
+                    High Confidence
+                  </span>
+                </div>
+
+                {/* Radial Gauge Display */}
+                <div className="flex items-center gap-4 p-3.5 rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)]">
+                  <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
+                    <svg className="w-20 h-20 -rotate-90 transform" viewBox="0 0 72 72">
+                      <circle className="text-surface-container-high" cx="36" cy="36" fill="none" r="30" stroke="currentColor" strokeWidth="6"></circle>
+                      <circle
+                        className="text-primary"
+                        cx="36"
+                        cy="36"
+                        fill="none"
+                        r="30"
+                        stroke="currentColor"
+                        strokeDasharray="188.5"
+                        strokeDashoffset="7.5"
+                        strokeLinecap="round"
+                        strokeWidth="6"
+                      ></circle>
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-base font-headline font-semibold text-on-surface">96%</span>
+                      <span className="text-[8px] font-medium text-on-surface-variant uppercase">Matched</span>
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex flex-col justify-center">
+                    <h4 className="text-xs font-headline font-semibold text-on-surface">You qualify for this grant!</h4>
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed mt-0.5">
+                      Profile data seamlessly satisfies 4 of 4 primary criteria evaluated by our recommendation engine.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Eligibility Criteria Breakdown */}
+                <div className="space-y-2.5 pt-1">
+                  <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] text-primary">
+                        <span className="material-symbols-outlined text-[16px]">school</span>
+                      </div>
+                      <div className="min-w-0 flex flex-col">
+                        <span className="text-xs font-medium text-on-surface">Academic Performance</span>
+                        <span className="text-[11px] text-on-surface-variant truncate">Min 75% or 7.5 GPA (Your GPA: 8.4/10)</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0 text-primary font-medium text-[11px]">
+                      <span>Eligible</span>
+                      <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] text-primary">
+                        <span className="material-symbols-outlined text-[16px]">payments</span>
+                      </div>
+                      <div className="min-w-0 flex flex-col">
+                        <span className="text-xs font-medium text-on-surface">Annual Family Income</span>
+                        <span className="text-[11px] text-on-surface-variant truncate">Below ₹4.5 Lakhs / yr verified</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0 text-primary font-medium text-[11px]">
+                      <span>Eligible</span>
+                      <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] text-primary">
+                        <span className="material-symbols-outlined text-[16px]">category</span>
+                      </div>
+                      <div className="min-w-0 flex flex-col">
+                        <span className="text-xs font-medium text-on-surface">Degree &amp; Specialization</span>
+                        <span className="text-[11px] text-on-surface-variant truncate">Undergraduate STEM / Tech streams</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0 text-primary font-medium text-[11px]">
+                      <span>Eligible</span>
+                      <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] text-primary">
+                        <span className="material-symbols-outlined text-[16px]">public</span>
+                      </div>
+                      <div className="min-w-0 flex flex-col">
+                        <span className="text-xs font-medium text-on-surface">Domicile &amp; Nationality</span>
+                        <span className="text-[11px] text-on-surface-variant truncate">Indian Resident • All States</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0 text-primary font-medium text-[11px]">
+                      <span>Eligible</span>
+                      <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Solution Benefits Framework */}
+              <div className="w-full rounded-xl p-5 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.6)] flex flex-col space-y-3.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-headline font-semibold text-on-surface">Scholarship Impact &amp; Benefits</h3>
+                  <span className="text-xs text-on-surface-variant font-medium">3 Dimensions</span>
+                </div>
+                <div className="space-y-3">
+                  <div className="p-3.5 rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] flex gap-3 items-start">
+                    <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center shrink-0 shadow-[2px_2px_5px_rgba(0,0,0,0.07),-2px_-2px_5px_rgba(255,255,255,0.8)] text-primary">
+                      <span className="material-symbols-outlined text-[18px]">business_center</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-semibold text-on-surface">Functional Benefit</span>
+                      <p className="text-[11px] text-on-surface-variant leading-relaxed mt-0.5">
+                        Full tuition subsidy, book stipend allowance, and zero manual portal hopping with automated document sync.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] flex gap-3 items-start">
+                    <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center shrink-0 shadow-[2px_2px_5px_rgba(0,0,0,0.07),-2px_-2px_5px_rgba(255,255,255,0.8)] text-tertiary">
+                      <span className="material-symbols-outlined text-[18px]">switch_left</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-semibold text-on-surface">Emotional Benefit</span>
+                      <p className="text-[11px] text-on-surface-variant leading-relaxed mt-0.5">
+                        Peace of mind regarding semester fee payments, liberating you to focus deeply on engineering coursework without financial anxiety.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] flex gap-3 items-start">
+                    <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center shrink-0 shadow-[2px_2px_5px_rgba(0,0,0,0.07),-2px_-2px_5px_rgba(255,255,255,0.8)] text-primary">
+                      <span className="material-symbols-outlined text-[18px]">diversity_3</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-semibold text-on-surface">Social &amp; Scholar Community</span>
+                      <p className="text-[11px] text-on-surface-variant leading-relaxed mt-0.5">
+                        Prestigious Tata Scholar badge, peer networking summits, and exclusive industry mentorship circles.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Required Documents Checklist */}
+              <div className="w-full rounded-xl p-5 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.6)] flex flex-col space-y-3.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-[20px]">checklist</span>
+                    <h3 className="text-sm font-headline font-semibold text-on-surface">Application Dossier</h3>
+                  </div>
+                  <span className="text-xs font-medium text-on-surface-variant">3 of 4 Ready</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-lg bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] flex items-center justify-center text-primary shrink-0">
+                      <span className="material-symbols-outlined text-[16px]">description</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-medium text-on-surface truncate">10th &amp; 12th Academic Marksheets</span>
+                      <span className="text-[10px] text-on-surface-variant">Verified via DigiLocker</span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 text-[10px] font-semibold text-primary rounded-full shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.05),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)]">
+                    Uploaded
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-lg bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] flex items-center justify-center text-primary shrink-0">
+                      <span className="material-symbols-outlined text-[16px]">domain_verification</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-medium text-on-surface truncate">College Bonafide Certificate</span>
+                      <span className="text-[10px] text-on-surface-variant">Issued by Registrar Office</span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 text-[10px] font-semibold text-primary rounded-full shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.05),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)]">
+                    Uploaded
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-lg bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] flex items-center justify-center text-error shrink-0">
+                      <span className="material-symbols-outlined text-[16px]">attach_money</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-medium text-on-surface truncate">Income Certificate (Tehsildar)</span>
+                      <span className="text-[10px] text-on-surface-variant">FY 2025-26 required</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => alert("Redirecting to DigiLocker to auto-fetch your latest FY 2025-26 MeeSeva Certificate.")}
+                    className="px-2.5 py-1 text-[10px] font-semibold text-error rounded-full bg-surface shadow-[2px_2px_4px_rgba(0,0,0,0.06),-2px_-2px_4px_rgba(255,255,255,0.7)] active:shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] transition-all"
+                  >
+                    Upload Now
+                  </button>
+                </div>
+
+                <div className="p-3 rounded-xl bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.04),-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-lg bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] flex items-center justify-center text-tertiary shrink-0">
+                      <span className="material-symbols-outlined text-[16px]">edit_note</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-xs font-medium text-on-surface truncate">Statement of Purpose / Essay</span>
+                      <span className="text-[10px] text-on-surface-variant">750 words drafted in app</span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 text-[10px] font-semibold text-tertiary rounded-full shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.05),inset_-2px_-2px_3px_rgba(255,255,255,0.7)]">
+                    Drafted
+                  </span>
+                </div>
+              </div>
+
+              {/* Interactive Scholarship Advisor Snippet */}
+              <div className="w-full rounded-xl p-4 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.6)] flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] flex items-center justify-center text-primary shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">smart_toy</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-semibold text-on-surface">Need help with your Essay?</div>
+                  <div className="text-[11px] text-on-surface-variant truncate">AI Advisor can review your SOP against award criteria.</div>
+                </div>
+                <button
+                  className="px-3 py-1.5 rounded-lg bg-surface text-xs font-semibold text-primary shadow-[3px_3px_6px_rgba(0,0,0,0.07),-3px_-3px_6px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] shrink-0 transition-all"
+                  onClick={handleAdvisor}
+                >
+                  Review
+                </button>
+              </div>
+            </div>
+
+            {/* Sticky Bottom Action Bar */}
+            <div className="fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-xl p-4 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
+              <div className="max-w-md mx-auto flex items-center gap-3">
+                <button
+                  className="flex-1 py-3 px-3 rounded-xl bg-surface shadow-[4px_4px_8px_rgba(0,0,0,0.08),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.08),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all flex items-center justify-center gap-1.5 text-on-surface"
+                  onClick={toggleReminder}
+                >
+                  <span className={`material-symbols-outlined text-[18px] ${reminderSet ? "text-tertiary" : ""}`}>
+                    {reminderSet ? "notifications_active" : "alarm"}
+                  </span>
+                  <span className="text-xs font-semibold truncate">
+                    {reminderSet ? "Reminder Set" : "Set Reminder"}
+                  </span>
+                </button>
+
+                <button
+                  className="flex-[1.4] py-3 px-4 rounded-xl bg-surface shadow-[4px_4px_8px_rgba(0,0,0,0.08),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.08),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all flex items-center justify-center gap-2 text-primary font-headline font-semibold"
+                  onClick={handleApply}
+                >
+                  <span className="text-xs tracking-tight">Apply Guidelines</span>
+                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    // --- Screen 4: Saved Deadlines Screen ---
+    function SavedDeadlinesScreen({ scholarships, setScholarships }) {
+      const navigate = useNavigate();
+      const [filter, setFilter] = useState("all");
+      const [showModal, setShowModal] = useState(false);
+      const [customName, setCustomName] = useState("");
+      const [customDate, setCustomDate] = useState("");
+      const [customAmount, setCustomAmount] = useState("");
+
+      const toggleReminder = (id) => {
+        setScholarships(prev =>
+          prev.map(item => item.id === id ? { ...item, reminders: !item.reminders } : item)
+        );
+      };
+
+      const handleAddDeadline = (e) => {
+        e.preventDefault();
+        if (!customName.trim()) return;
+
+        const newDead = {
+          id: "custom-" + Date.now(),
+          name: customName,
+          fullName: customName,
+          provider: "College Department Fellowship",
+          category: "Institutional",
+          match: 90,
+          amount: customAmount || "₹25,000",
+          amountSub: customAmount || "₹25,000",
+          deadlineDays: 20,
+          deadlineDate: customDate || "Dec 20, 2026",
+          eligibility: "Department enrolled student",
+          progress: 10,
+          progressStatus: "Personal entry",
+          filterTag: "urgent",
+          urgent: false,
+          reminders: true,
+          bookmarked: true,
+          seats: "Cohort specific",
+          image: null
+        };
+
+        setScholarships([newDead, ...scholarships]);
+        setCustomName("");
+        setCustomDate("");
+        setCustomAmount("");
+        setShowModal(false);
+      };
+
+      const displayed = scholarships.filter(item => {
+        if (!item.bookmarked) return false;
+        if (filter === "all") return true;
+        if (filter === "urgent") return item.deadlineDays <= 12;
+        if (filter === "applied") return item.progress > 50;
+        if (filter === "past") return false;
+        return true;
+      });
+
+      return (
+        <div className="min-h-screen bg-surface flex flex-col">
+          <Header title="ScholarHub" subtitle="Saved Deadlines" />
+          <main className="flex flex-col relative w-full pt-16 pb-28 bg-surface min-h-screen">
+            <div className="flex flex-col w-full max-w-md mx-auto px-5 py-4 space-y-6">
+              {/* AI Matching & Summary Header Pill */}
+              <div className="p-4 rounded-xl bg-surface shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.7)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]">
+                    <span className="material-symbols-outlined text-[22px]">auto_awesome</span>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-primary uppercase tracking-wider">AI Tracker Status</p>
+                    <h2 className="text-sm font-semibold text-on-surface">4 Saved • ₹2,05,000 Potential</h2>
+                  </div>
+                </div>
+                <button
+                  aria-label="Sync with Google Calendar"
+                  onClick={() => alert("Google Calendar integration synchronized 3 upcoming deadlines with Google Alerts.")}
+                  className="w-9 h-9 rounded-xl bg-surface flex items-center justify-center text-on-surface shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all cursor-pointer"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[19px]">sync</span>
+                </button>
+              </div>
+
+              {/* Urgent Deadline Callout Alert */}
+              <div className="relative overflow-hidden rounded-xl bg-surface p-5 shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.7)]">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-error shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] shrink-0">
+                    <span className="material-symbols-outlined text-[22px]">warning</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-error">Next Deadline Approaching!</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-error text-on-error shadow-[2px_2px_4px_rgba(220,38,38,0.25)]">48h Left</span>
+                    </div>
+                    <p className="text-sm font-semibold text-on-surface mt-1 leading-snug">Telangana State Scholarship</p>
+                    <p className="text-xs text-on-surface-variant mt-0.5">Closes in 48 hours. Don't miss out on ₹30,000 funding support.</p>
+                    <div className="mt-3 flex items-center gap-2">
+                      <button
+                        onClick={() => navigate("/scholarship/telangana-epass")}
+                        className="px-3.5 py-1.5 rounded-xl bg-surface text-xs font-semibold text-primary shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] inline-flex items-center gap-1.5 transition-all"
+                      >
+                        <span>Complete Checklist</span>
+                        <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Segmented Filter Tabs */}
+              <div className="p-1 rounded-xl bg-surface shadow-[inset_4px_4px_8px_rgba(0,0,0,0.06),inset_-4px_-4px_8px_rgba(255,255,255,0.6)] flex items-center justify-between">
+                {[
+                  { key: "all", label: "All (4)" },
+                  { key: "urgent", label: "Urgent (2)" },
+                  { key: "applied", label: "Applied (2)" },
+                  { key: "past", label: "Past (0)" }
+                ].map(tab => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setFilter(tab.key)}
+                    className={`filter-tab flex-1 py-2 px-1 text-center rounded-lg text-xs transition-all ${
+                      filter === tab.key
+                        ? "font-semibold text-primary bg-surface shadow-[3px_3px_6px_rgba(0,0,0,0.07),-3px_-3px_6px_rgba(255,255,255,0.7)]"
+                        : "font-medium text-on-surface-variant hover:text-on-surface"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Deadlines List */}
+              <div className="space-y-5">
+                {displayed.map((item) => (
+                  <article
+                    key={item.id}
+                    className="scholarship-card rounded-xl bg-surface p-5 shadow-[6px_6px_14px_rgba(0,0,0,0.08),-6px_-6px_14px_rgba(255,255,255,0.65)] flex flex-col space-y-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] shrink-0">
+                          <span className="material-symbols-outlined text-[26px]">
+                            {item.id === "telangana-epass" ? "account_balance" : item.id === "national-merit" ? "workspace_premium" : item.id === "tata-trusts" ? "corporate_fare" : "school"}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="px-2 py-0.5 rounded-lg text-[10px] font-semibold text-secondary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.5)]">
+                              {item.category}
+                            </span>
+                            <span className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold ${item.deadlineDays <= 3 ? "text-error shadow-[inset_2px_2px_4px_rgba(220,38,38,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" : "text-primary shadow-[inset_2px_2px_4px_rgba(99,102,241,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"}`}>
+                              {item.deadlineDays} Days Left
+                            </span>
+                          </div>
+                          <h3 className="text-base font-semibold text-on-surface mt-1 leading-snug">
+                            {item.name}
+                          </h3>
+                          <p className="text-xs text-on-surface-variant">{item.provider}</p>
+                        </div>
+                      </div>
+                      <button
+                        aria-label="Bookmark options"
+                        onClick={() => {
+                          setScholarships(prev => prev.map(s => s.id === item.id ? { ...s, bookmarked: !s.bookmarked } : s));
+                        }}
+                        className="w-8 h-8 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[3px_3px_6px_rgba(0,0,0,0.06),-3px_-3px_6px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06)]"
+                      >
+                        <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                          bookmark
+                        </span>
+                      </button>
+                    </div>
+
+                    {/* Grant Details & Date Pill */}
+                    <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-surface shadow-[inset_3px_3px_7px_rgba(0,0,0,0.05),inset_-3px_-3px_7px_rgba(255,255,255,0.5)]">
+                      <div>
+                        <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider block">Award Amount</span>
+                        <span className="text-sm font-semibold text-on-surface">{item.amount}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider block">Closing Date</span>
+                        <span className={`text-sm font-semibold ${item.deadlineDays <= 3 ? "text-error" : "text-on-surface"}`}>
+                          {item.deadlineDate}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Progress Section */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-medium text-on-surface-variant">Application Progress</span>
+                        <span className="font-semibold text-primary">{item.progress}% ({item.progressStatus})</span>
+                      </div>
+                      <div className="w-full h-3 rounded-full bg-surface shadow-[inset_2px_2px_5px_rgba(0,0,0,0.08),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] p-0.5">
+                        <div className="h-full rounded-full bg-primary" style={{ width: `${item.progress}%` }}></div>
+                      </div>
+                    </div>
+
+                    {/* Action Row & Toggle */}
+                    <div className="pt-1 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => toggleReminder(item.id)}
+                          className="remind-toggle relative w-11 h-6 rounded-full bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] flex items-center p-0.5 transition-colors cursor-pointer"
+                          role="switch"
+                          type="button"
+                        >
+                          <span
+                            className={`w-5 h-5 rounded-full shadow-[2px_2px_5px_rgba(0,0,0,0.15)] transform transition-transform duration-200 ${
+                              item.reminders ? "bg-primary translate-x-5" : "bg-outline translate-x-0"
+                            }`}
+                          ></span>
+                        </button>
+                        <span className="text-[11px] font-medium text-on-surface-variant flex items-center gap-1">
+                          <span className={`material-symbols-outlined text-[14px] ${item.reminders ? "text-primary" : ""}`}>
+                            {item.reminders ? "notifications_active" : "notifications_off"}
+                          </span>
+                          {item.reminders ? "Reminders ON" : "Reminders OFF"}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => navigate(`/scholarship/${item.id}`)}
+                        className="px-4 py-2 rounded-xl bg-surface text-xs font-semibold text-primary shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all"
+                        type="button"
+                      >
+                        Review Application
+                      </button>
+                    </div>
+                  </article>
+                ))}
+
+                {displayed.length === 0 && (
+                  <div className="rounded-xl bg-surface p-8 text-center shadow-[inset_4px_4px_10px_rgba(0,0,0,0.05),inset_-4px_-4px_10px_rgba(255,255,255,0.6)]">
+                    <div className="w-12 h-12 rounded-xl bg-surface mx-auto flex items-center justify-center text-secondary shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] mb-3">
+                      <span className="material-symbols-outlined text-[24px]">event_busy</span>
+                    </div>
+                    <h4 className="text-sm font-semibold text-on-surface">No Deadlines Found</h4>
+                    <p className="text-xs text-on-surface-variant mt-1">
+                      There are no scholarship records matching the selected filter.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Utility Actions */}
+              <div className="pt-2 space-y-3">
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="w-full p-4 rounded-xl bg-surface shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.7)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] flex items-center justify-between transition-all group"
+                  type="button"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]">
+                      <span className="material-symbols-outlined text-[20px]">add_alarm</span>
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-semibold text-on-surface">Add Custom College Deadline</p>
+                      <p className="text-xs text-on-surface-variant">Set personal submission alerts &amp; checklist</p>
+                    </div>
+                  </div>
+                  <span className="material-symbols-outlined text-primary text-[20px] transition-transform group-hover:translate-x-1">chevron_right</span>
+                </button>
+
+                <div className="p-4 rounded-xl bg-surface shadow-[inset_3px_3px_7px_rgba(0,0,0,0.04),inset_-3px_-3px_7px_rgba(255,255,255,0.6)] flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-primary text-[20px]">edit_calendar</span>
+                    <span className="text-xs font-medium text-on-surface">Calendar Auto-Sync</span>
+                  </div>
+                  <span className="text-xs font-semibold text-primary">Connected to Google Calendar</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Modal / Slide-up Drawer */}
+            {showModal && (
+              <div className="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-end justify-center p-4">
+                <div className="w-full max-w-md bg-surface rounded-2xl p-6 shadow-[10px_10px_30px_rgba(0,0,0,0.2)] space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-semibold text-on-surface">Add Custom Deadline</h3>
+                    <button
+                      className="w-8 h-8 rounded-xl bg-surface flex items-center justify-center text-on-surface-variant shadow-[3px_3px_6px_rgba(0,0,0,0.06),-3px_-3px_6px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06)]"
+                      onClick={() => setShowModal(false)}
+                      type="button"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">close</span>
+                    </button>
+                  </div>
+                  <form onSubmit={handleAddDeadline} className="space-y-3">
+                    <div>
+                      <label className="text-xs font-medium text-on-surface-variant block mb-1.5">Scholarship or College Grant Name</label>
+                      <div className="rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] p-3">
+                        <input
+                          value={customName}
+                          onChange={(e) => setCustomName(e.target.value)}
+                          required
+                          className="w-full bg-transparent text-sm text-on-surface outline-none"
+                          placeholder="e.g. Department Merit Fellowship"
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1.5">Deadline Date</label>
+                        <div className="rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] p-3">
+                          <input
+                            value={customDate}
+                            onChange={(e) => setCustomDate(e.target.value)}
+                            className="w-full bg-transparent text-xs text-on-surface outline-none"
+                            type="date"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1.5">Estimated Amount</label>
+                        <div className="rounded-xl bg-surface shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] p-3">
+                          <input
+                            value={customAmount}
+                            onChange={(e) => setCustomAmount(e.target.value)}
+                            className="w-full bg-transparent text-xs text-on-surface outline-none"
+                            placeholder="₹25,000"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pt-2 flex gap-3">
+                      <button
+                        className="flex-1 py-3 rounded-xl bg-surface text-xs font-semibold text-secondary shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06)]"
+                        onClick={() => setShowModal(false)}
+                        type="button"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="flex-1 py-3 rounded-xl bg-surface text-xs font-semibold text-primary shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06)]"
+                        type="submit"
+                      >
+                        Save &amp; Track
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </main>
+          <BottomNav />
+        </div>
+      );
+    }
+
+    // --- Screen 5: Explore Screen ---
+    function ExploreScreen({ scholarships, setScholarships }) {
+      const navigate = useNavigate();
+      const [searchQuery, setSearchQuery] = useState("");
+      const [selectedFilter, setSelectedFilter] = useState("all");
+      const [eligibleOnly, setEligibleOnly] = useState(false);
+      const [minAward30k, setMinAward30k] = useState(false);
+
+      const toggleBookmark = (id) => {
+        setScholarships(prev =>
+          prev.map(item => item.id === id ? { ...item, bookmarked: !item.bookmarked } : item)
+        );
+      };
+
+      const categories = [
+        { id: "all", label: "All", count: 142 },
+        { id: "merit", label: "Merit-Based", count: 48 },
+        { id: "women", label: "Women in STEM", count: 26 },
+        { id: "state", label: "State Govt / ePASS", count: 34 },
+        { id: "central", label: "Central Govt / NSP", count: 18 },
+        { id: "trusts", label: "Private Trusts", count: 16 },
+        { id: "need", label: "Need-Based / EWS", count: 22 }
+      ];
+
+      const filtered = scholarships.filter(item => {
+        const matchesSearch = item.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.category.toLowerCase().includes(searchQuery.toLowerCase());
+
+        if (!matchesSearch) return false;
+
+        if (selectedFilter === "merit" && !item.fullName.toLowerCase().includes("merit")) return false;
+        if (selectedFilter === "women" && !item.fullName.toLowerCase().includes("girl") && !item.fullName.toLowerCase().includes("apac")) return false;
+        if (selectedFilter === "state" && !item.fullName.toLowerCase().includes("telangana")) return false;
+        if (selectedFilter === "central" && !item.fullName.toLowerCase().includes("merit") && !item.fullName.toLowerCase().includes("pragati")) return false;
+        if (selectedFilter === "trusts" && !item.fullName.toLowerCase().includes("tata") && !item.fullName.toLowerCase().includes("reliance")) return false;
+
+        if (eligibleOnly && item.match < 94) return false;
+        return true;
+      });
+
+      return (
+        <div className="min-h-screen bg-surface flex flex-col">
+          <Header title="ScholarHub" subtitle="Saved Deadlines" />
+          <main className="flex flex-col relative w-full pt-16 pb-28 bg-surface min-h-screen">
+            <div className="flex flex-col w-full max-w-md mx-auto pb-8">
+              {/* Screen Intro */}
+              <section className="px-5 pt-3 pb-2 flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <h1 className="text-2xl font-headline font-semibold text-on-surface tracking-tight">Explore Scholarships</h1>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-label font-medium text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] bg-surface">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    142 Live
+                  </span>
+                </div>
+                <p className="text-xs font-body text-on-surface-variant">Browse 140+ verified grants &amp; financial aid opportunities tailored for you</p>
+              </section>
+
+              {/* Search & Filter Controls */}
+              <section className="px-5 py-2.5 flex items-center gap-3">
+                <div className="flex-1 flex items-center gap-2.5 px-3.5 h-12 rounded-xl bg-surface shadow-[inset_4px_4px_8px_rgba(0,0,0,0.06),inset_-4px_-4px_8px_rgba(255,255,255,0.75)]">
+                  <span className="material-symbols-outlined text-[20px] text-on-surface-variant">search</span>
+                  <input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-xs font-body text-on-surface placeholder:text-on-surface-variant/70 tracking-tight"
+                    placeholder="Search provider, major, degree, keyword..."
+                    type="search"
+                  />
+                </div>
+                <button
+                  aria-label="Open filter settings"
+                  onClick={() => {
+                    setEligibleOnly(!eligibleOnly);
+                    alert(`Filtered to ${!eligibleOnly ? "Eligible (94%+ fit) only" : "All matches"}`);
+                  }}
+                  className="relative w-12 h-12 flex-shrink-0 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.75)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] transition-all cursor-pointer"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[22px]">tune</span>
+                  <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-primary text-on-primary text-[10px] font-label font-semibold leading-none shadow-[2px_2px_5px_rgba(99,102,241,0.4)]">
+                    3
+                  </span>
+                </button>
+              </section>
+
+              {/* Scrollable Category Filter Pills */}
+              <section className="py-2.5 overflow-x-auto no-scrollbar">
+                <div className="flex items-center gap-2.5 px-5 w-max">
+                  {categories.map(cat => {
+                    const isSelected = selectedFilter === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => setSelectedFilter(cat.id)}
+                        className={`px-4 py-2 rounded-xl text-xs transition-all flex items-center gap-1.5 ${
+                          isSelected
+                            ? "bg-surface text-primary font-label font-semibold shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.85)]"
+                            : "bg-surface text-on-surface-variant font-label font-medium shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)]"
+                        }`}
+                        type="button"
+                      >
+                        <span>{cat.label}</span>
+                        {isSelected && (
+                          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-primary text-on-primary font-medium">
+                            {cat.count}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* Secondary Active Filters & Sorting Status */}
+              <section className="px-5 py-2 flex flex-col gap-2">
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                  <button
+                    onClick={() => alert("Sorting automatically optimized by your verified B.Tech CSE profile.")}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface text-[11px] font-label font-medium text-on-surface shadow-[3px_3px_6px_rgba(0,0,0,0.05),-3px_-3px_6px_rgba(255,255,255,0.65)] whitespace-nowrap cursor-pointer"
+                    type="button"
+                  >
+                    <span>Sort: Best AI Match</span>
+                    <span className="material-symbols-outlined text-[14px] text-on-surface-variant">keyboard_arrow_down</span>
+                  </button>
+
+                  <button
+                    onClick={() => setMinAward30k(!minAward30k)}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface text-[11px] font-label font-medium whitespace-nowrap ${
+                      minAward30k
+                        ? "text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]"
+                        : "text-on-surface-variant shadow-[3px_3px_6px_rgba(0,0,0,0.05),-3px_-3px_6px_rgba(255,255,255,0.65)]"
+                    }`}
+                    type="button"
+                  >
+                    <span>Min Award: ₹30k+</span>
+                    <span className="material-symbols-outlined text-[13px]">{minAward30k ? "close" : "add"}</span>
+                  </button>
+
+                  <button
+                    onClick={() => setEligibleOnly(!eligibleOnly)}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface text-[11px] font-label font-medium whitespace-nowrap ${
+                      eligibleOnly
+                        ? "text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.7)]"
+                        : "text-on-surface-variant shadow-[3px_3px_6px_rgba(0,0,0,0.05),-3px_-3px_6px_rgba(255,255,255,0.65)]"
+                    }`}
+                    type="button"
+                  >
+                    <span>Eligible Only</span>
+                    <span className="material-symbols-outlined text-[13px]">{eligibleOnly ? "check" : "filter_list"}</span>
+                  </button>
+                </div>
+                <div className="flex items-center justify-between text-[11px] font-body text-on-surface-variant pt-0.5">
+                  <span>Showing {filtered.length} opportunities</span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/70"></span>
+                    Updated today
+                  </span>
+                </div>
+              </section>
+
+              {/* AI Recommended Match Callout Banner */}
+              <section className="px-5 py-2">
+                <div
+                  onClick={() => navigate("/scholarship/tata-trusts")}
+                  className="rounded-2xl p-4 bg-surface shadow-[6px_6px_12px_rgba(0,0,0,0.07),-6px_-6px_12px_rgba(255,255,255,0.75)] flex items-start gap-3.5 relative overflow-hidden cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-surface flex-shrink-0 flex items-center justify-center text-tertiary shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]">
+                    <span className="material-symbols-outlined text-[22px]">auto_awesome</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5 min-w-0 pr-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-label font-semibold uppercase tracking-wider text-tertiary">AI Recommended Spotlight</span>
+                      <span className="px-1.5 py-0.2 rounded-full bg-primary-fixed text-on-primary-fixed text-[9px] font-semibold">96% High Fit</span>
+                    </div>
+                    <p className="text-xs font-headline font-semibold text-on-surface leading-tight">Tailored to your Academic Profile</p>
+                    <p className="text-[11px] font-body text-on-surface-variant leading-tight mt-0.5">
+                      Matched with your verified <strong className="text-on-surface font-medium">B.Tech CSE</strong> &amp; <strong className="text-on-surface font-medium">Telangana Domicile</strong> records.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              {/* Comprehensive Scholarship Cards List */}
+              <section className="px-5 pt-3 flex flex-col gap-4">
+                {filtered.map((item) => (
+                  <article
+                    key={item.id}
+                    className="p-5 rounded-2xl bg-surface shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.8)] flex flex-col gap-3.5 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex flex-col min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="px-2 py-0.5 rounded-lg text-[10px] font-label font-medium text-on-surface-variant bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)]">
+                            {item.category}
+                          </span>
+                          <span className={`px-2 py-0.5 rounded-lg text-[10px] font-label font-semibold ${item.deadlineDays <= 3 ? "text-error" : "text-primary"} bg-surface shadow-[inset_1.5px_1.5px_3px_rgba(0,0,0,0.06),inset_-1.5px_-1.5px_3px_rgba(255,255,255,0.7)] flex items-center gap-0.5`}>
+                            {item.deadlineDays <= 3 ? (
+                              <span className="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+                            ) : (
+                              <span className="material-symbols-outlined text-[12px]">verified</span>
+                            )}
+                            {item.deadlineDays <= 3 ? `Closing in ${item.deadlineDays} days` : `${item.match}% Match`}
+                          </span>
+                        </div>
+                        <h2 className="text-sm font-headline font-semibold text-on-surface leading-snug">
+                          {item.fullName}
+                        </h2>
+                        <span className="text-[11px] font-body text-on-surface-variant">{item.provider}</span>
+                      </div>
+                      <button
+                        aria-label={`Bookmark ${item.name}`}
+                        onClick={() => toggleBookmark(item.id)}
+                        className={`w-9 h-9 rounded-xl bg-surface flex-shrink-0 flex items-center justify-center ${item.bookmarked ? "text-primary" : "text-on-surface-variant"} shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.65)]`}
+                        type="button"
+                      >
+                        <span
+                          className="material-symbols-outlined text-[19px]"
+                          style={{ fontVariationSettings: item.bookmarked ? "'FILL' 1" : "'FILL' 0" }}
+                        >
+                          {item.bookmarked ? "bookmark" : "bookmark_border"}
+                        </span>
+                      </button>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-surface shadow-[inset_2px_2px_5px_rgba(0,0,0,0.04),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-label uppercase text-on-surface-variant tracking-wider">Grant Value</span>
+                        <span className="text-sm font-headline font-semibold text-primary">{item.amount}</span>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className="text-[10px] font-label uppercase text-on-surface-variant tracking-wider">Window</span>
+                        <span className={`text-[11px] font-label font-medium flex items-center gap-1 ${item.deadlineDays <= 3 ? "text-error font-semibold" : "text-on-surface"}`}>
+                          <span className={`material-symbols-outlined text-[13px] ${item.deadlineDays <= 3 ? "text-error" : "text-tertiary"}`}>
+                            {item.deadlineDays <= 3 ? "alarm" : "schedule"}
+                          </span>
+                          {item.deadlineDays <= 3 ? `${item.deadlineDate} (${item.deadlineDays}d)` : `Closes ${item.deadlineDate}`}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[11px] font-body text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[15px] text-on-surface-variant flex-shrink-0">school</span>
+                      <span className="truncate">{item.eligibility}</span>
+                    </div>
+
+                    <div className="pt-1 flex items-center justify-between">
+                      <span className="text-[10px] font-medium text-secondary">{item.seats || "Open Quota"}</span>
+                      <button
+                        onClick={() => navigate(`/scholarship/${item.id}`)}
+                        className="px-3.5 py-1.5 rounded-xl bg-surface text-xs font-label font-semibold text-primary shadow-[4px_4px_8px_rgba(0,0,0,0.06),-4px_-4px_8px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] flex items-center gap-1 transition-all"
+                        type="button"
+                      >
+                        <span>View Details</span>
+                        <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </section>
+
+              {/* Bottom Action & Verification Footnote */}
+              <section className="px-5 pt-6 pb-2 flex flex-col items-center gap-4">
+                <button
+                  onClick={() => alert("Fetched additional 20 state and private grants from National Scholarship Portal.")}
+                  className="w-full py-3.5 px-4 rounded-xl bg-surface text-on-surface font-headline font-semibold text-sm shadow-[6px_6px_12px_rgba(0,0,0,0.08),-6px_-6px_12px_rgba(255,255,255,0.75)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.07),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] flex items-center justify-center gap-2 text-primary transition-all cursor-pointer"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[18px]">expand_circle_down</span>
+                  <span>Load 20 More Opportunities</span>
+                </button>
+                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-surface shadow-[inset_2px_2px_5px_rgba(0,0,0,0.04),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] text-[11px] font-body text-on-surface-variant leading-relaxed">
+                  <span className="material-symbols-outlined text-[17px] text-primary flex-shrink-0 mt-0.5">verified_user</span>
+                  <p>
+                    All scholarships verified by ScholarHub AI engine. Eligibility criteria are automatically mapped with your DigiLocker &amp; university profile to save you time.
+                  </p>
+                </div>
+              </section>
+            </div>
+          </main>
+          <BottomNav />
+        </div>
+      );
+    }
+
+    // --- Screen 6: Profile Screen ---
+    function ProfileScreen() {
+      const navigate = useNavigate();
+      const [alertUrgent, setAlertUrgent] = useState(true);
+      const [alertWhatsapp, setAlertWhatsapp] = useState(true);
+      const [alertCalendar, setAlertCalendar] = useState(true);
+
+      return (
+        <div className="min-h-screen bg-surface flex flex-col">
+          <Header title="ScholarHub" subtitle="Student Profile" />
+          <main className="flex flex-col relative w-full pt-16 pb-28 bg-surface min-h-screen">
+            <div className="flex flex-col w-full max-w-md mx-auto px-5 py-4 gap-6">
+              {/* Section 1: Profile Header & AI Completeness Card */}
+              <section className="rounded-xl bg-surface p-5 shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.75)] flex flex-col gap-5">
+                <div className="flex items-start gap-4">
+                  <div className="relative shrink-0">
+                    <div className="w-18 h-18 rounded-2xl bg-surface p-1 shadow-[4px_4px_10px_rgba(0,0,0,0.08),-4px_-4px_10px_rgba(255,255,255,0.8)]">
+                      <img
+                        className="w-16 h-16 rounded-xl object-cover"
+                        alt="Ananya Sharma portrait"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1JFE1vOOjKyGfVfMUMhq0QYKV6KYYC5w0wWkBXDBlyEprfH5vG5YkVUOZ1Pf54IgRs_PeamFi1BwnRMgvXKMCbQpW3HRrWSF0MqIIJ_UYMKFYF1rdJSxR_jTxAEFqC7u9YDWeU0gxoKrApQE4xJevSLSjWSJJ5keqAlGq3UA-7XNoGhV1uvxzjqxdodapA4YDc6T2gQZc0CF1rleqqaemLvImm2o8YRHDNSXaeiRG"
+                      />
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.1),-2px_-2px_5px_rgba(255,255,255,0.9)] flex items-center justify-center text-primary">
+                      <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-1">
+                      <h1 className="text-lg font-headline font-semibold text-on-surface tracking-tight truncate">Ananya Sharma</h1>
+                      <button
+                        aria-label="Edit Profile Details"
+                        onClick={() => alert("Profile edit mode enabled: sync with JNTUH student database.")}
+                        className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-on-surface-variant shadow-[3px_3px_7px_rgba(0,0,0,0.06),-3px_-3px_7px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.07),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all cursor-pointer"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">tune</span>
+                      </button>
+                    </div>
+                    <span className="text-xs font-medium text-primary mt-0.5 leading-snug">B.Tech Computer Science (2nd Year)</span>
+                    <span className="text-[11px] font-normal text-on-surface-variant leading-tight truncate mt-0.5">JNTU Hyderabad Affiliate Campus</span>
+                    <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                      <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]">
+                        <span className="material-symbols-outlined text-[13px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>grade</span>
+                        <span className="text-[11px] font-semibold text-on-surface">CGPA 8.4</span>
+                        <span className="text-[10px] text-on-surface-variant">/ 10</span>
+                      </div>
+                      <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)] text-[10px] font-medium text-secondary">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                        Verified Scholar
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Profile Completeness Progress Tracker */}
+                <div className="p-3.5 rounded-xl bg-surface shadow-[inset_3px_3px_7px_rgba(0,0,0,0.05),inset_-3px_-3px_7px_rgba(255,255,255,0.7)] flex flex-col gap-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[16px] text-tertiary">auto_awesome</span>
+                      <span className="text-xs font-semibold text-on-surface tracking-tight">AI Readiness Index</span>
+                    </div>
+                    <span className="text-xs font-bold text-primary font-headline">92%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden shadow-[inset_1px_1px_3px_rgba(0,0,0,0.1)]">
+                    <div className="h-full bg-primary rounded-full transition-all duration-700 ease-out" style={{ width: "92%" }}></div>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-on-surface-variant">
+                    <span className="leading-tight">Unlocks <strong className="text-on-surface font-semibold">+14 targeted grants</strong></span>
+                    <button
+                      onClick={() => alert("Upload 1 pending Income Certificate to reach 100% readiness.")}
+                      className="text-primary font-medium flex items-center gap-0.5 hover:underline"
+                      type="button"
+                    >
+                      <span>Complete 2 items</span>
+                      <span className="material-symbols-outlined text-[12px]">chevron_right</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 2: AI Matching Criteria Setup */}
+              <section className="flex flex-col gap-3">
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-surface flex items-center justify-center text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.8)]">
+                      <span className="material-symbols-outlined text-[16px]">tune</span>
+                    </div>
+                    <h2 className="text-sm font-headline font-semibold text-on-surface tracking-tight">AI Matching Criteria</h2>
+                  </div>
+                  <button
+                    onClick={() => alert("Re-syncing profile data with DigiLocker and State ePASS database...")}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface text-primary text-xs font-medium shadow-[3px_3px_7px_rgba(0,0,0,0.06),-3px_-3px_7px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.6)] transition-all cursor-pointer"
+                    type="button"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">sync</span>
+                    <span>Re-Sync</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="rounded-xl bg-surface p-4 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-on-surface-variant flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[14px] text-secondary">payments</span>
+                        Annual Family Income
+                      </span>
+                      <span className="px-2 py-0.5 rounded-md bg-surface shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.6)] text-[10px] font-medium text-primary flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[10px]">lock</span> DigiLocker Verified
+                      </span>
+                    </div>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-sm font-semibold text-on-surface">Below ₹4,50,000 / year</span>
+                      <span className="text-[11px] text-on-surface-variant">Tier-2 EWS Pool</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-surface p-4 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-on-surface-variant flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[14px] text-secondary">location_on</span>
+                        Category &amp; Domicile
+                      </span>
+                      <span className="px-2 py-0.5 rounded-md bg-surface shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.6)] text-[10px] font-medium text-secondary">
+                        Rural District Native
+                      </span>
+                    </div>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-sm font-semibold text-on-surface">General / Telangana State Resident</span>
+                      <span className="text-[11px] text-on-surface-variant">Nizamabad Dist</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-surface p-4 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-on-surface-variant flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[14px] text-secondary">school</span>
+                        Academic Standing &amp; Cohort
+                      </span>
+                      <span className="px-2 py-0.5 rounded-md bg-surface shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.6)] text-[10px] font-medium text-on-surface-variant">
+                        Full-time Degree
+                      </span>
+                    </div>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-sm font-semibold text-on-surface">B.Tech CSE (2024-2028)</span>
+                      <span className="text-[11px] text-on-surface-variant">Semester 4 Active</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-surface p-4 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex flex-col gap-2.5">
+                    <span className="text-[11px] font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[14px] text-secondary">workspace_premium</span>
+                      Diversity &amp; Special Eligibility Filters
+                    </span>
+                    <div className="flex flex-wrap gap-2 pt-0.5">
+                      <span className="px-2.5 py-1 rounded-lg bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)] text-xs font-medium text-primary flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[13px]">female</span> Women in STEM
+                      </span>
+                      <span className="px-2.5 py-1 rounded-lg bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)] text-xs font-medium text-on-surface flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[13px] text-secondary">family_restroom</span> 1st Gen Learner
+                      </span>
+                      <span className="px-2.5 py-1 rounded-lg bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)] text-xs font-medium text-on-surface flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[13px] text-secondary">biotech</span> Tech Innovator
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 3: Verified Documents Locker */}
+              <section className="flex flex-col gap-3">
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-surface flex items-center justify-center text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.8)]">
+                      <span className="material-symbols-outlined text-[16px]">folder_special</span>
+                    </div>
+                    <h2 className="text-sm font-headline font-semibold text-on-surface tracking-tight">Verified Document Locker</h2>
+                  </div>
+                  <span className="text-xs font-medium text-on-surface-variant">3 of 4 Ready</span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="rounded-xl bg-surface p-3.5 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-semibold text-on-surface truncate">10th &amp; 12th Board Marksheets</span>
+                        <span className="text-[11px] text-on-surface-variant">DigiLocker Authenticated • PDF</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="px-2 py-1 rounded-md bg-surface shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.6)] text-[10px] font-semibold text-primary">Verified</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-surface p-3.5 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-primary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">badge</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-semibold text-on-surface truncate">Institutional Bonafide Certificate</span>
+                        <span className="text-[11px] text-on-surface-variant">Signed by Dean • Valid for AY 2024-25</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="px-2 py-1 rounded-md bg-surface shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.6)] text-[10px] font-semibold text-primary">Verified</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-surface p-3.5 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-error shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">warning</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-semibold text-on-surface truncate">MeeSeva Income Certificate</span>
+                        <span className="text-[11px] text-error font-medium">Expires in 28 Days • Re-upload</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => alert("Initiating MeeSeva DigiLocker renewal sync...")}
+                      className="px-2.5 py-1 rounded-lg bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] text-[11px] font-semibold text-error shrink-0 cursor-pointer"
+                      type="button"
+                    >
+                      Renew
+                    </button>
+                  </div>
+
+                  <div className="rounded-xl bg-surface p-3.5 shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.7)] flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-tertiary shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">history_edu</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-semibold text-on-surface truncate">Personal Statement &amp; SOP</span>
+                        <span className="text-[11px] text-on-surface-variant">AI Match Strength: 88/100</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => navigate("/scholarship/tata-trusts")}
+                        className="px-2 py-1 rounded-md bg-surface shadow-[inset_1px_1px_3px_rgba(0,0,0,0.05),inset_-1px_-1px_3px_rgba(255,255,255,0.6)] text-[10px] font-semibold text-tertiary cursor-pointer"
+                      >
+                        Review
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => alert("Upload dialog opened: Supported formats PDF, PNG, JPG under 5MB.")}
+                  className="w-full mt-1 py-3 px-4 rounded-xl bg-surface text-primary text-xs font-semibold tracking-tight shadow-[5px_5px_11px_rgba(0,0,0,0.06),-5px_-5px_11px_rgba(255,255,255,0.8)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add_circle</span>
+                  <span>Upload Additional Document (Caste, ECA, or Rank Card)</span>
+                </button>
+              </section>
+
+              {/* Section 4: Target Funding Goal & Alert Preferences */}
+              <section className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 px-1">
+                  <div className="w-7 h-7 rounded-lg bg-surface flex items-center justify-center text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.8)]">
+                    <span className="material-symbols-outlined text-[16px]">notifications_active</span>
+                  </div>
+                  <h2 className="text-sm font-headline font-semibold text-on-surface tracking-tight">Deadlines &amp; Notification Engine</h2>
+                </div>
+                <div className="rounded-xl bg-surface p-4 shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.75)] flex flex-col gap-4">
+                  <div className="flex items-center justify-between pb-3 border-none">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-on-surface">Target Funding Need</span>
+                      <span className="text-[11px] text-on-surface-variant">Tuition + Living Hostel Expenses</span>
+                    </div>
+                    <div className="px-3 py-1.5 rounded-lg bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]">
+                      <span className="text-xs font-bold text-primary font-headline">₹1,50,000 / yr</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex flex-col pr-3">
+                      <span className="text-xs font-medium text-on-surface">Urgent 48-Hour Deadline Alerts</span>
+                      <span className="text-[11px] text-on-surface-variant">Early alerts prior to portal closure</span>
+                    </div>
+                    <button
+                      aria-checked={alertUrgent}
+                      onClick={() => setAlertUrgent(!alertUrgent)}
+                      className="w-12 h-7 rounded-full bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.8)] p-0.5 transition-colors focus:outline-none relative flex items-center shrink-0 cursor-pointer"
+                      role="switch"
+                      type="button"
+                    >
+                      <span className={`w-6 h-6 rounded-full bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.1),-2px_-2px_5px_rgba(255,255,255,0.9)] flex items-center justify-center transition-transform ${alertUrgent ? "translate-x-5 text-primary" : "translate-x-0 text-outline"}`}>
+                        <span className="material-symbols-outlined text-[14px]">notifications</span>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex flex-col pr-3">
+                      <span className="text-xs font-medium text-on-surface">WhatsApp Match Summaries</span>
+                      <span className="text-[11px] text-on-surface-variant">+91 98765 43210 (Verified OTP)</span>
+                    </div>
+                    <button
+                      aria-checked={alertWhatsapp}
+                      onClick={() => setAlertWhatsapp(!alertWhatsapp)}
+                      className="w-12 h-7 rounded-full bg-surface shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.8)] p-0.5 transition-colors focus:outline-none relative flex items-center shrink-0 cursor-pointer"
+                      role="switch"
+                      type="button"
+                    >
+                      <span className={`w-6 h-6 rounded-full bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.1),-2px_-2px_5px_rgba(255,255,255,0.9)] flex items-center justify-center transition-transform ${alertWhatsapp ? "translate-x-5 text-primary" : "translate-x-0 text-outline"}`}>
+                        <span className="material-symbols-outlined text-[14px]">chat</span>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex flex-col pr-3">
+                      <span className="text-xs font-medium text-on-surface">Calendar Auto-Sync</span>
+                      <span className="text-[11px] text-on-surface-variant">Syncs submission cuts to Google Cal</span>
+                    </div>
+                    <div className="px-2.5 py-1 rounded-full bg-surface shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)] text-[11px] font-semibold text-primary flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[13px]">check_circle</span>
+                      <span>Synced</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 5: Institutional Account & Security */}
+              <section className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 px-1">
+                  <div className="w-7 h-7 rounded-lg bg-surface flex items-center justify-center text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.06),-2px_-2px_5px_rgba(255,255,255,0.8)]">
+                    <span className="material-symbols-outlined text-[16px]">shield</span>
+                  </div>
+                  <h2 className="text-sm font-headline font-semibold text-on-surface tracking-tight">Institutional &amp; Support</h2>
+                </div>
+                <div className="rounded-xl bg-surface p-2 shadow-[6px_6px_14px_rgba(0,0,0,0.07),-6px_-6px_14px_rgba(255,255,255,0.75)] flex flex-col gap-1">
+                  <div
+                    onClick={() => alert("Connected via JNTUH SAML SSO: ananya.s@jntuh.ac.in")}
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-surface-bright active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-on-surface-variant shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)]">
+                        <span className="material-symbols-outlined text-[18px]">account_balance</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-on-surface">College SSO &amp; .edu Email</span>
+                        <span className="text-[10px] text-on-surface-variant">ananya.s@jntuh.ac.in</span>
+                      </div>
+                    </div>
+                    <span className="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+                  </div>
+
+                  <div
+                    onClick={() => alert("Data stored locally with zero external tracker cookies.")}
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-surface-bright active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-on-surface-variant shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)]">
+                        <span className="material-symbols-outlined text-[18px]">privacy_tip</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-on-surface">Data Privacy &amp; Grant Consent</span>
+                        <span className="text-[10px] text-on-surface-variant">Protected under Indian DPDP Act 2023</span>
+                      </div>
+                    </div>
+                    <span className="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+                  </div>
+
+                  <div
+                    onClick={() => alert("Opening 1-on-1 advisor consultation chat...")}
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-surface-bright active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-primary shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)]">
+                        <span className="material-symbols-outlined text-[18px]">support_agent</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-on-surface">1-on-1 Scholarship Advisor</span>
+                        <span className="text-[10px] text-on-surface-variant">Dedicated counselor chat available</span>
+                      </div>
+                    </div>
+                    <span className="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+                  </div>
+
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="flex items-center justify-between p-3 rounded-lg text-left active:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] transition-all cursor-pointer"
+                    type="button"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-error shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.7)]">
+                        <span className="material-symbols-outlined text-[18px]">logout</span>
+                      </div>
+                      <span className="text-xs font-semibold text-error">Sign Out from Account</span>
+                    </div>
+                    <span className="material-symbols-outlined text-error text-[18px]">arrow_forward</span>
+                  </button>
+                </div>
+              </section>
+
+              {/* App Version Micro Footer */}
+              <div className="flex flex-col items-center justify-center py-2 text-[11px] text-on-surface-variant gap-0.5">
+                <span>ScholarHub Student Engine v3.4.2</span>
+                <span>Empowering equal educational access across India</span>
+              </div>
+            </div>
+          </main>
+          <BottomNav />
+        </div>
+      );
+    }
+
+    // --- Main App Root Component with MemoryRouter ---
+    function App() {
+      const [scholarships, setScholarships] = useState(initialScholarships);
+
+      return (
+        <MemoryRouter initialEntries={["/login"]}>
+          <Routes>
+            <Route path="/" element={<LoginScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/home" element={<HomeScreen />} />
+            <Route
+              path="/scholarship/:id"
+              element={<DetailsScreen scholarships={scholarships} />}
+            />
+            <Route
+              path="/saved-deadlines"
+              element={
+                <SavedDeadlinesScreen
+                  scholarships={scholarships}
+                  setScholarships={setScholarships}
+                />
+              }
+            />
+            <Route
+              path="/explore"
+              element={
+                <ExploreScreen
+                  scholarships={scholarships}
+                  setScholarships={setScholarships}
+                />
+              }
+            />
+            <Route path="/profile" element={<ProfileScreen />} />
+          </Routes>
+        </MemoryRouter>
+      );
+    }
+
+    const container = document.getElementById("root");
+    const root = createRoot(container);
+    root.render(<App />);
+  </script>
+</body>
+</html>
